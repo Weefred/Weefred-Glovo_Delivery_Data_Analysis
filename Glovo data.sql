@@ -66,13 +66,14 @@ GROUP BY [assigned_location]
 HAVING AVG(d.[delivery_duration]) > 30
 
 --10. Which rider completed the fastest delivery, and what was the time?
-SELECT TOP 1 ri.[rider_id], ri.[full_name], MIN (d.[delivery_duration]) AS Fastest_delivery_time
+SELECT TOP 1 ri.[rider_id], ri.[full_name],MIN([delivery_duration]) AS Fastest_delivery_time
 FROM [dbo].[Riders] AS ri
 INNER JOIN [dbo].[Deliveries] AS d
 ON ri.[rider_id] = d.[rider_id]
+WHERE [delivery_duration] = (SELECT MIN([delivery_duration]) FROM [dbo].[Deliveries])
 GROUP BY ri.[rider_id], [full_name]
 ORDER BY Fastest_delivery_time ASC
-
+  
 --E. Order Trends:
 
 --11. What are the top 3 most ordered foods?
