@@ -24,14 +24,15 @@ GROUP BY [full_name]
 ORDER BY Total_order_value DESC
 
 --5. Which customer(s) have spent more than the average total amount across all orders?
-SELECT c.[full_name], o.[total_amount]
+SELECT o.[customer_id], c.[full_name],  SUM(o.[total_amount]) AS Total_amount
 FROM [dbo].[Customers - Customers] AS c
 INNER JOIN [dbo].[Orders (1)] AS o
 ON c.[customer_id] = o.[customer_id]
-WHERE o.[total_amount] > 
+GROUP BY o.[customer_id],[full_name]
+HAVING SUM(o.[total_amount]) > 
 (SELECT AVG([total_amount]) FROM [dbo].[Orders (1)])
-ORDER BY [total_amount] DESC
-
+ORDER BY Total_amount DESC
+  
 --C. Restaurant Performance:
 
 --6. What is the total number of orders placed for each restaurant?
@@ -106,7 +107,7 @@ SELECT COUNT(*) AS 'Num of customers'
 FROM (SELECT o.customer_id, COUNT(*) AS o
 FROM [dbo].[Orders (1)]as o
 GROUP BY customer_id 
-HAVING COUNT(*) > 10) AS o
+HAVING COUNT(*) >Â 10)Â AS o
 
 --15. Provide a list of all orders where the order value exceeds the average order value across the platform.
 SELECT [order_id], [total_amount]
